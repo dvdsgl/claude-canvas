@@ -9,7 +9,21 @@ A TUI toolkit that gives Claude Code its own display. Spawn interactive terminal
 ## Requirements
 
 - [Bun](https://bun.sh) — used to run skill tools
-- [tmux](https://github.com/tmux/tmux) — canvases spawn in split panes
+- **Terminal multiplexer** (one of):
+  - [tmux](https://github.com/tmux/tmux) — traditional terminal multiplexer
+  - [WezTerm](https://wezfurlong.org/wezterm/) — modern GPU-accelerated terminal
+
+## Terminal Configuration
+
+Canvas auto-detects your terminal. Priority:
+1. `CANVAS_TERMINAL` env var (explicit override)
+2. tmux if running (even inside WezTerm)
+3. WezTerm if available
+
+```bash
+export CANVAS_TERMINAL=wezterm  # force WezTerm
+export CANVAS_TERMINAL=tmux     # force tmux
+```
 
 ## Installation
 
