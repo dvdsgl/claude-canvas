@@ -55,7 +55,9 @@ program
   .action(() => {
     const env = detectTerminal();
     console.log("Terminal Environment:");
+    console.log(`  Type: ${env.type}`);
     console.log(`  In tmux: ${env.inTmux}`);
+    console.log(`  In WezTerm: ${env.inWezTerm}`);
     console.log(`\nSummary: ${env.summary}`);
   });
 
