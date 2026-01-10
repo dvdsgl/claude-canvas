@@ -267,10 +267,6 @@ async function spawnWezterm(command: string): Promise<boolean> {
   return createWeztermPane(command);
 }
 
-// ============================================================================
-// Utilities (WezTerm-specific, for extended functionality)
-// ============================================================================
-
 export async function activatePane(paneId: string): Promise<void> {
   const env = detectTerminal();
   if (env.type === "wezterm") {
