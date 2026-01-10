@@ -182,12 +182,22 @@ export function Document({ id, config: initialConfig, socketPath, scenario = "di
     }
   }, [selectionStart, selectionEnd]);
 
-  // Use mouse hook
+  // Scroll handler - works in both read-only and edit modes
+  const handleScroll = useCallback((event: { scrollDirection: "up" | "down" | null }) => {
+    if (event.scrollDirection === "up") {
+      setScrollOffset((o) => Math.max(0, o - 3)); // 3 lines per scroll tick
+    } else if (event.scrollDirection === "down") {
+      setScrollOffset((o) => Math.min(maxScroll, o + 3));
+    }
+  }, [maxScroll]);
+
+  // Use mouse hook - scroll enabled always, click/drag only in edit mode
   useMouse({
-    enabled: !readOnly,
-    onClick: handleMouseClick,
-    onMove: handleMouseMove,
-    onRelease: handleMouseRelease,
+    enabled: true, // Enable for scroll support in all modes
+    onClick: readOnly ? undefined : handleMouseClick,
+    onMove: readOnly ? undefined : handleMouseMove,
+    onRelease: readOnly ? undefined : handleMouseRelease,
+    onScroll: handleScroll,
   });
 
   // Helper: get normalized selection bounds
@@ -476,7 +486,7 @@ export function Document({ id, config: initialConfig, socketPath, scenario = "di
       <Box justifyContent="center">
         <Box width={docWidth} justifyContent="space-between">
           <Text color="gray" dimColor>
-            {readOnly ? "↑↓ scroll • Esc quit" : "click/drag select • type to edit • Esc quit"}
+            {readOnly ? "↑↓/scroll to navigate • Esc quit" : "click/drag select • scroll/↑↓ navigate • Esc quit"}
           </Text>
           <Text color="gray" dimColor>
             {!readOnly && (

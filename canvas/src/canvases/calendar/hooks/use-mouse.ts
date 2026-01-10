@@ -19,6 +19,8 @@ export interface MouseEvent {
   button: number; // 0=left, 1=middle, 2=right
   pressed: boolean; // true on press, false on release
   isMotion: boolean; // true if this is a motion event (mouse move)
+  isScroll: boolean; // true if this is a scroll wheel event
+  scrollDirection: "up" | "down" | null; // scroll direction if isScroll is true
   modifiers: {
     shift: boolean;
     meta: boolean;
@@ -37,6 +39,7 @@ export interface UseMouseOptions {
   onClick?: (event: MouseEvent) => void;
   onMove?: (event: MouseEvent) => void;
   onRelease?: (event: MouseEvent) => void;
+  onScroll?: (event: MouseEvent) => void;
 }
 
 // Parse SGR mouse sequence: ESC[<btn;x;y(M|m)
@@ -64,19 +67,28 @@ function parseMouseEvent(data: string): MouseEvent | null {
   const meta = (btn & 8) !== 0;
   const ctrl = (btn & 16) !== 0;
   const isMotion = (btn & 32) !== 0;
+  const isScroll = (btn & 64) !== 0;
+  // For scroll: bit 0 determines direction (0=up, 1=down)
+  const scrollDirection: "up" | "down" | null = isScroll
+    ? (btn & 1) === 0
+      ? "up"
+      : "down"
+    : null;
 
   return {
     x,
     y,
-    button: button === 3 ? 0 : button, // button 3 means no button held
+    button: isScroll ? -1 : button === 3 ? 0 : button, // -1 for scroll, 0 for no button held
     pressed,
     isMotion,
+    isScroll,
+    scrollDirection,
     modifiers: { shift, meta, ctrl },
   };
 }
 
 export function useMouse(options: UseMouseOptions = {}): MouseState {
-  const { enabled = true, onClick, onMove, onRelease } = options;
+  const { enabled = true, onClick, onMove, onRelease, onScroll } = options;
   const { stdin, setRawMode } = useStdin();
   const [state, setState] = useState<MouseState>({
     position: null,
@@ -88,12 +100,14 @@ export function useMouse(options: UseMouseOptions = {}): MouseState {
   const onClickRef = useRef(onClick);
   const onMoveRef = useRef(onMove);
   const onReleaseRef = useRef(onRelease);
+  const onScrollRef = useRef(onScroll);
 
   useEffect(() => {
     onClickRef.current = onClick;
     onMoveRef.current = onMove;
     onReleaseRef.current = onRelease;
-  }, [onClick, onMove, onRelease]);
+    onScrollRef.current = onScroll;
+  }, [onClick, onMove, onRelease, onScroll]);
 
   useEffect(() => {
     if (!enabled || !stdin) return;
@@ -126,7 +140,10 @@ export function useMouse(options: UseMouseOptions = {}): MouseState {
           });
 
           // Call appropriate callback based on event type
-          if (event.isMotion) {
+          if (event.isScroll) {
+            // Scroll wheel event
+            onScrollRef.current?.(event);
+          } else if (event.isMotion) {
             // Motion event (mouse move)
             onMoveRef.current?.(event);
           } else if (event.pressed) {
