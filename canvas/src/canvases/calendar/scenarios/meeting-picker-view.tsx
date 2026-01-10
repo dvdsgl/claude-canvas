@@ -282,10 +282,44 @@ export function MeetingPickerView({ id, config, socketPath }: Props) {
     [terminalToSlot]
   );
 
+  // Scroll handler for time slot and week navigation
+  const handleScroll = useCallback(
+    (event: MouseEvent) => {
+      if (countdown !== null) return; // Ignore during countdown
+
+      if (event.modifiers.shift) {
+        // Shift+scroll = week navigation
+        if (event.scrollDirection === "up") {
+          setCurrentDate((d) => {
+            const prev = new Date(d);
+            prev.setDate(d.getDate() - 7);
+            return prev;
+          });
+        } else if (event.scrollDirection === "down") {
+          setCurrentDate((d) => {
+            const next = new Date(d);
+            next.setDate(d.getDate() + 7);
+            return next;
+          });
+        }
+      } else {
+        // Regular scroll = time slot navigation
+        setUsingKeyboard(true);
+        if (event.scrollDirection === "up") {
+          setCursorSlot((s) => Math.max(0, s - 1));
+        } else if (event.scrollDirection === "down") {
+          setCursorSlot((s) => Math.min(totalSlots - 1, s + 1));
+        }
+      }
+    },
+    [countdown, totalSlots]
+  );
+
   useMouse({
     enabled: true,
     onClick: handleMouseClick,
     onMove: handleMouseMove,
+    onScroll: handleScroll,
   });
 
   // Get slot info for cursor position
@@ -581,7 +615,7 @@ export function MeetingPickerView({ id, config, socketPath }: Props) {
           <Text color="gray">Esc to cancel</Text>
         ) : (
           <>
-            <Text color="gray">{"↑↓←→ move • Space/Enter select • n/p week • t today • q cancel"}</Text>
+            <Text color="gray">{"↑↓←→/scroll move • Space/Enter select • n/p/Shift+scroll week • t today • q cancel"}</Text>
             {(() => {
               const cursorInfo = getCursorSlotInfo();
               if (cursorInfo) {

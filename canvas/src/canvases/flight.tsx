@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Box, Text, useInput, useApp, useStdout } from "ink";
 import { useIPC } from "./calendar/hooks/use-ipc";
+import { useMouse } from "./calendar/hooks/use-mouse";
 import {
   type FlightConfig,
   type FlightResult,
@@ -234,6 +235,38 @@ export function FlightCanvas({
         setSeatCursorCol((c) => Math.min(seatmap.seatsPerRow.length - 1, c + 1)); // Move toward other window (F)
       }
     }
+  });
+
+  // Scroll handler - respects focus mode
+  const handleScroll = useCallback(
+    (event: { scrollDirection: "up" | "down" | null }) => {
+      if (countdown !== null) return; // Ignore during countdown
+
+      if (focusMode === "flights") {
+        // Scroll through flight list
+        if (event.scrollDirection === "up") {
+          setSelectedFlightIndex((i) => Math.max(0, i - 1));
+          setSelectedSeat(null);
+        } else if (event.scrollDirection === "down") {
+          setSelectedFlightIndex((i) => Math.min(flights.length - 1, i + 1));
+          setSelectedSeat(null);
+        }
+      } else if (focusMode === "seatmap" && seatmap) {
+        // Scroll through seatmap rows (horizontal plane layout)
+        if (event.scrollDirection === "up") {
+          setSeatCursorRow((r) => Math.max(1, r - 1)); // Move toward front
+        } else if (event.scrollDirection === "down") {
+          setSeatCursorRow((r) => Math.min(seatmap.rows, r + 1)); // Move toward back
+        }
+      }
+    },
+    [focusMode, flights.length, seatmap, countdown]
+  );
+
+  // Enable mouse scroll
+  useMouse({
+    enabled: true,
+    onScroll: handleScroll,
   });
 
   // Layout calculations

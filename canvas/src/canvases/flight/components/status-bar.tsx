@@ -42,13 +42,13 @@ export function StatusBar({
       statusText = "";
     }
   } else if (focusMode === "flights") {
-    helpText = "^v navigate";
+    helpText = "^v/scroll navigate";
     if (hasSeatmap) {
       helpText += " | Tab seatmap";
     }
     helpText += " | Enter select | q quit";
   } else {
-    helpText = "arrows navigate | Space select seat | Tab flights | Enter confirm | q quit";
+    helpText = "arrows/scroll navigate | Space select seat | Tab flights | Enter confirm | q quit";
     if (selectedSeat) {
       statusText = `Selected: ${selectedSeat}`;
     }

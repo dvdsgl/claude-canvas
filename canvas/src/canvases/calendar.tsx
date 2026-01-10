@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Box, Text, useInput, useApp, useStdout } from "ink";
 import { MeetingPickerView } from "./calendar/scenarios/meeting-picker-view";
+import { useMouse } from "./calendar/hooks/use-mouse";
 import type { MeetingPickerConfig } from "../scenarios/types";
 
 export interface CalendarEvent {
@@ -444,6 +445,29 @@ export function Calendar({ id, config, socketPath, scenario = "display" }: Props
     }
   });
 
+  // Scroll handler for week navigation
+  const handleScroll = useCallback((event: { scrollDirection: "up" | "down" | null }) => {
+    if (event.scrollDirection === "up") {
+      setCurrentDate((d) => {
+        const prev = new Date(d);
+        prev.setDate(d.getDate() - 7);
+        return prev;
+      });
+    } else if (event.scrollDirection === "down") {
+      setCurrentDate((d) => {
+        const next = new Date(d);
+        next.setDate(d.getDate() + 7);
+        return next;
+      });
+    }
+  }, []);
+
+  // Enable mouse scroll
+  useMouse({
+    enabled: true,
+    onScroll: handleScroll,
+  });
+
   // Build time column (2 rows per hour, matching slot heights)
   const currentHour = currentTime.getHours();
   const currentMinute = currentTime.getMinutes();
@@ -578,7 +602,7 @@ export function Calendar({ id, config, socketPath, scenario = "display" }: Props
 
       {/* Help bar */}
       <Box>
-        <Text color="gray">{"←/→ week  •  t today  •  q quit"}</Text>
+        <Text color="gray">{"←/→/scroll week  •  t today  •  q quit"}</Text>
       </Box>
     </Box>
   );
