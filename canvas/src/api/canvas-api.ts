@@ -37,103 +37,108 @@ export async function spawnCanvasWithIPC<TConfig, TResult>(
   const id = `${kind}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   const socketPath = getSocketPath(id);
 
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     let resolved = false;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let server: Awaited<ReturnType<typeof createIPCServer>> | null = null;
 
     const cleanup = () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
         timeoutId = null;
       }
-      server.close();
+      if (server) {
+        server.close();
+      }
     };
 
-    const server = createIPCServer({
-      socketPath,
-      onConnect() {
-        // Canvas connected, waiting for ready message
-      },
-      onMessage(msg: CanvasMessage) {
-        if (resolved) return;
+    try {
+      server = await createIPCServer({
+        socketPath,
+        onClientConnect() {
+          // Canvas connected, waiting for ready message
+        },
+        onMessage(msg: CanvasMessage) {
+          if (resolved) return;
 
-        switch (msg.type) {
-          case "ready":
-            onReady?.();
-            break;
+          switch (msg.type) {
+            case "ready":
+              onReady?.();
+              break;
 
-          case "selected":
-            resolved = true;
-            cleanup();
-            resolve({
-              success: true,
-              data: msg.data as TResult,
-            });
-            break;
+            case "selected":
+              resolved = true;
+              cleanup();
+              resolve({
+                success: true,
+                data: msg.data as TResult,
+              });
+              break;
 
-          case "cancelled":
-            resolved = true;
-            cleanup();
-            resolve({
-              success: true,
-              cancelled: true,
-            });
-            break;
+            case "cancelled":
+              resolved = true;
+              cleanup();
+              resolve({
+                success: true,
+                cancelled: true,
+              });
+              break;
 
-          case "error":
+            case "error":
+              resolved = true;
+              cleanup();
+              resolve({
+                success: false,
+                error: msg.message,
+              });
+              break;
+
+            case "pong":
+              // Response to ping, ignore
+              break;
+          }
+        },
+        onClientDisconnect() {
+          if (!resolved) {
             resolved = true;
             cleanup();
             resolve({
               success: false,
-              error: msg.message,
+              error: "Canvas disconnected unexpectedly",
             });
-            break;
+          }
+        },
+        onError(error) {
+          if (!resolved) {
+            resolved = true;
+            cleanup();
+            resolve({
+              success: false,
+              error: error.message,
+            });
+          }
+        },
+      });
 
-          case "pong":
-            // Response to ping, ignore
-            break;
-        }
-      },
-      onDisconnect() {
+      // Set timeout
+      timeoutId = setTimeout(() => {
         if (!resolved) {
           resolved = true;
+          server?.broadcast({ type: "close" } as any);
           cleanup();
           resolve({
             success: false,
-            error: "Canvas disconnected unexpectedly",
+            error: "Timeout waiting for user selection",
           });
         }
-      },
-      onError(error) {
-        if (!resolved) {
-          resolved = true;
-          cleanup();
-          resolve({
-            success: false,
-            error: error.message,
-          });
-        }
-      },
-    });
+      }, timeout);
 
-    // Set timeout
-    timeoutId = setTimeout(() => {
-      if (!resolved) {
-        resolved = true;
-        server.send({ type: "close" });
-        cleanup();
-        resolve({
-          success: false,
-          error: "Timeout waiting for user selection",
-        });
-      }
-    }, timeout);
-
-    // Spawn the canvas
-    spawnCanvas(kind, id, JSON.stringify(config), {
-      socketPath,
-      scenario,
-    }).catch((err) => {
+      // Spawn the canvas
+      await spawnCanvas(kind, id, JSON.stringify(config), {
+        socketPath,
+        scenario,
+      });
+    } catch (err: any) {
       if (!resolved) {
         resolved = true;
         cleanup();
@@ -142,7 +147,7 @@ export async function spawnCanvasWithIPC<TConfig, TResult>(
           error: `Failed to spawn canvas: ${err.message}`,
         });
       }
-    });
+    }
   });
 }
 
@@ -214,4 +219,3 @@ export async function editDocument(
     options
   );
 }
-
