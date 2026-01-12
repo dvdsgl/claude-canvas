@@ -5,6 +5,8 @@ import { Document } from "./document";
 import type { DocumentConfig } from "./document/types";
 import { FlightCanvas } from "./flight";
 import type { FlightConfig } from "./flight/types";
+import { TripleVertical, type TripleVerticalConfig } from "./triple-vertical";
+import { Panel, type PanelConfig } from "./panel";
 
 // Clear screen and hide cursor
 function clearScreen() {
@@ -54,6 +56,18 @@ export async function renderCanvas(
       return renderFlight(
         id,
         config as FlightConfig | undefined,
+        options
+      );
+    case "triple-vertical":
+      return renderTripleVertical(
+        id,
+        config as TripleVerticalConfig | undefined,
+        options
+      );
+    case "panel":
+      return renderPanel(
+        id,
+        config as PanelConfig | undefined,
         options
       );
     default:
@@ -111,6 +125,44 @@ async function renderFlight(
       config={config}
       socketPath={options?.socketPath}
       scenario={options?.scenario || "booking"}
+    />,
+    {
+      exitOnCtrlC: true,
+    }
+  );
+  await waitUntilExit();
+}
+
+async function renderTripleVertical(
+  id: string,
+  config?: TripleVerticalConfig,
+  options?: RenderOptions
+): Promise<void> {
+  const { waitUntilExit } = render(
+    <TripleVertical
+      id={id}
+      config={config}
+      socketPath={options?.socketPath}
+      scenario={options?.scenario || "display"}
+    />,
+    {
+      exitOnCtrlC: true,
+    }
+  );
+  await waitUntilExit();
+}
+
+async function renderPanel(
+  id: string,
+  config?: PanelConfig,
+  options?: RenderOptions
+): Promise<void> {
+  const { waitUntilExit } = render(
+    <Panel
+      id={id}
+      config={config}
+      socketPath={options?.socketPath}
+      scenario={options?.scenario || "display"}
     />,
     {
       exitOnCtrlC: true,

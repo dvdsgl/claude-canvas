@@ -40,11 +40,13 @@ program
   .option("--config <json>", "Canvas configuration (JSON)")
   .option("--socket <path>", "Unix socket path for IPC")
   .option("--scenario <name>", "Scenario name (e.g., display, meeting-picker)")
+  .option("--layout <type>", "Layout type: right (default) or triple-vertical")
   .action(async (kind = "demo", options) => {
     const id = options.id || `${kind}-1`;
     const result = await spawnCanvas(kind, id, options.config, {
       socketPath: options.socket,
       scenario: options.scenario,
+      layout: options.layout as "right" | "triple-vertical" | undefined,
     });
     console.log(`Spawned ${kind} canvas '${id}' via ${result.method}`);
   });

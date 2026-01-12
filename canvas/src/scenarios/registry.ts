@@ -6,6 +6,7 @@ import { meetingPickerScenario } from "./calendar/meeting-picker";
 import { documentDisplayScenario } from "./document/display";
 import { documentEditScenario } from "./document/edit";
 import { emailPreviewScenario } from "./document/email-preview";
+import { tripleVerticalDisplayScenario } from "./triple-vertical/display";
 
 // Registry of all scenarios keyed by "canvasKind:scenarioName"
 const registry = new Map<string, ScenarioDefinition>();
@@ -18,6 +19,9 @@ registry.set("calendar:meeting-picker", meetingPickerScenario);
 registry.set("document:display", documentDisplayScenario);
 registry.set("document:edit", documentEditScenario);
 registry.set("document:email-preview", emailPreviewScenario);
+
+// Register triple-vertical scenarios
+registry.set("triple-vertical:display", tripleVerticalDisplayScenario);
 
 export function getScenario(
   canvasKind: string,

@@ -36,6 +36,7 @@ Canvas provides interactive terminal displays (TUIs) that Claude can spawn and c
 | `calendar` | Display calendars, pick meeting times | `display`, `meeting-picker` |
 | `document` | View/edit markdown documents | `display`, `edit`, `email-preview` |
 | `flight` | Flight comparison and seat selection | `booking` |
+| `triple-vertical` | Three-section vertical workspace layout | `display` |
 
 ## Quick Start
 
@@ -58,10 +59,26 @@ bun run src/cli.ts spawn [kind] --scenario [name] --config '[json]'
 ```
 
 **Parameters:**
-- `kind`: Canvas type (calendar, document, flight)
+- `kind`: Canvas type (calendar, document, flight, triple-vertical)
 - `--scenario`: Interaction mode (e.g., display, meeting-picker, edit)
 - `--config`: JSON configuration for the canvas
 - `--id`: Optional canvas instance ID for IPC
+- `--layout`: Layout type - `right` (default, side-by-side) or `triple-vertical` (above/below)
+
+## Triple-Vertical Layout
+
+**IMPORTANT:** To spawn panes above and below Claude Code, use `--layout triple-vertical`:
+
+```bash
+bun run src/cli.ts spawn workspace --layout triple-vertical
+```
+
+**DO NOT use** `spawn triple-vertical` alone - that spawns a single canvas to the right.
+
+This creates:
+- **Top pane** (25%): Terminal/System Monitor
+- **Middle** (50%): Claude Code stays in focus
+- **Bottom pane** (25%): Output/Build Status
 
 ## IPC Communication
 
@@ -81,6 +98,34 @@ Interactive canvases communicate via Unix domain sockets.
 { type: "close" }           // Request canvas to close
 { type: "ping" }            // Health check
 ```
+
+## Updating Canvases
+
+Send live updates to running canvases using the `update` command:
+
+```bash
+bun run src/cli.ts update <canvas-id> --config '<json>'
+```
+
+**Example - update a panel:**
+```bash
+# Write config to avoid shell escaping issues
+cat > /tmp/config.json << 'EOF'
+{
+  "title": "Updated Title",
+  "content": "New content here",
+  "borderColor": "green"
+}
+EOF
+
+# Send update
+bun run src/cli.ts update my-canvas --config "$(cat /tmp/config.json)"
+```
+
+**Triple-vertical layout IDs:**
+When spawning with `--id workspace`, the panels are:
+- `workspace-top` - Top panel
+- `workspace-bottom` - Bottom panel
 
 ## High-Level API
 
@@ -113,3 +158,4 @@ if (result.success && result.data) {
 | `calendar` | Calendar display and meeting picker details |
 | `document` | Document rendering and text selection |
 | `flight` | Flight comparison and seat map details |
+| `triple-vertical` | Three-section vertical workspace layout |

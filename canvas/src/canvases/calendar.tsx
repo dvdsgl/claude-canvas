@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Text, useInput, useApp, useStdout } from "ink";
 import { MeetingPickerView } from "./calendar/scenarios/meeting-picker-view";
+import { useIPCServer } from "./calendar/hooks/use-ipc-server";
 import type { MeetingPickerConfig } from "../scenarios/types";
 
 export interface CalendarEvent {
@@ -345,15 +346,30 @@ function AllDayEventsRow({ weekDays, events, columnWidth, timeColumnWidth }: All
   );
 }
 
-export function Calendar({ id, config, socketPath, scenario = "display" }: Props) {
+export function Calendar({ id, config: initialConfig, socketPath, scenario = "display" }: Props) {
+  const { exit } = useApp();
+
+  // Live config state (can be updated via IPC)
+  const [liveConfig, setLiveConfig] = useState<CalendarConfig | undefined>(initialConfig);
+
+  // IPC for communicating with Claude (server mode for CLI)
+  const ipc = useIPCServer({
+    socketPath,
+    scenario: scenario || "display",
+    onClose: () => exit(),
+    onUpdate: (newConfig) => {
+      setLiveConfig(newConfig as CalendarConfig);
+    },
+  });
+
   // Route to meeting picker if that scenario is requested
-  if (scenario === "meeting-picker" && config?.calendars) {
+  if (scenario === "meeting-picker" && liveConfig?.calendars) {
     const pickerConfig: MeetingPickerConfig = {
-      calendars: config.calendars,
-      slotGranularity: config.slotGranularity || 30,
-      minDuration: config.minDuration || 30,
-      maxDuration: config.maxDuration || 120,
-      title: config.title,
+      calendars: liveConfig.calendars,
+      slotGranularity: liveConfig.slotGranularity || 30,
+      minDuration: liveConfig.minDuration || 30,
+      maxDuration: liveConfig.maxDuration || 120,
+      title: liveConfig.title,
       startHour: 6,
       endHour: 22,
     };
@@ -361,7 +377,6 @@ export function Calendar({ id, config, socketPath, scenario = "display" }: Props
   }
 
   // Default display scenario
-  const { exit } = useApp();
   const { stdout } = useStdout();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -413,8 +428,8 @@ export function Calendar({ id, config, socketPath, scenario = "display" }: Props
     baseSlotHeight + (i < extraRows ? 1 : 0)
   );
 
-  const events: CalendarEvent[] = config?.events
-    ? config.events.map((e) => ({
+  const events: CalendarEvent[] = liveConfig?.events
+    ? liveConfig.events.map((e) => ({
         ...e,
         startTime: new Date(e.startTime),
         endTime: new Date(e.endTime),
