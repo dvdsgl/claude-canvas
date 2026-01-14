@@ -55,10 +55,6 @@ export function detectTerminal(): TerminalEnvironment {
   return { type, inTmux, inWezTerm, summary };
 }
 
-// ============================================================================
-// Canvas Spawning
-// ============================================================================
-
 export interface SpawnResult {
   method: string;
   pid?: number;
