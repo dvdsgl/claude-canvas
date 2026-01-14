@@ -199,10 +199,6 @@ async function spawnTmux(command: string): Promise<boolean> {
   return createTmuxPane(command);
 }
 
-// ============================================================================
-// WezTerm Backend
-// ============================================================================
-
 async function verifyWeztermPane(paneId: string): Promise<boolean> {
   try {
     const { stdout } = await execAsync("wezterm cli list --format json");
