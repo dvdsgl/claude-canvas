@@ -106,10 +106,6 @@ export async function spawnCanvas(
   }
 }
 
-// ============================================================================
-// Pane ID Tracking (shared between backends)
-// ============================================================================
-
 const CANVAS_PANE_FILE = "/tmp/claude-canvas-pane-id";
 const CANVAS_BACKEND_FILE = "/tmp/claude-canvas-backend";
 
