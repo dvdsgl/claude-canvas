@@ -148,10 +148,6 @@ async function saveCanvasPaneId(paneId: string, backend: TerminalType): Promise<
   await Bun.write(CANVAS_BACKEND_FILE, backend);
 }
 
-// ============================================================================
-// tmux Backend
-// ============================================================================
-
 async function verifyTmuxPane(paneId: string): Promise<boolean> {
   const result = spawnSync("tmux", ["display-message", "-t", paneId, "-p", "#{pane_id}"]);
   const output = result.stdout?.toString().trim();
