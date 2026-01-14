@@ -4,10 +4,6 @@ import { promisify } from "node:util";
 
 const execAsync = promisify(exec);
 
-// ============================================================================
-// Terminal Detection
-// ============================================================================
-
 export type TerminalType = "tmux" | "wezterm" | "none";
 
 export interface TerminalEnvironment {
