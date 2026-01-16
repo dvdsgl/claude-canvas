@@ -5,6 +5,9 @@ import { useApp } from "ink";
 import { connectWithRetry, type IPCClient } from "../../../ipc/client";
 import type { CanvasMessage, ControllerMessage } from "../../../ipc/types";
 
+// Canvas side: receives ControllerMessage, sends CanvasMessage
+type CanvasSideClient = IPCClient<CanvasMessage>;
+
 export interface UseIPCOptions {
   socketPath: string | undefined;
   scenario: string;
@@ -24,7 +27,7 @@ export function useIPC(options: UseIPCOptions): IPCHandle {
   const { socketPath, scenario, onClose, onUpdate } = options;
   const { exit } = useApp();
   const [isConnected, setIsConnected] = useState(false);
-  const clientRef = useRef<IPCClient | null>(null);
+  const clientRef = useRef<CanvasSideClient | null>(null);
   const onCloseRef = useRef(onClose);
   const onUpdateRef = useRef(onUpdate);
 
@@ -41,9 +44,10 @@ export function useIPC(options: UseIPCOptions): IPCHandle {
 
     const connect = async () => {
       try {
-        const client = await connectWithRetry({
+        // Canvas receives ControllerMessage, sends CanvasMessage
+        const client = await connectWithRetry<ControllerMessage, CanvasMessage>({
           socketPath,
-          onMessage: (msg: ControllerMessage) => {
+          onMessage: (msg) => {
             switch (msg.type) {
               case "close":
                 onCloseRef.current?.();

@@ -1,7 +1,8 @@
 // Meeting Picker View - Interactive calendar for selecting meeting times
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Box, Text, useInput, useApp, useStdout } from "ink";
+import { Box, Text, useApp, useStdout } from "ink";
+import { useSafeInput } from "../../../utils/use-safe-input";
 import { useMouse, type MouseEvent } from "../hooks/use-mouse";
 import { useIPC } from "../hooks/use-ipc";
 import type { MeetingPickerConfig, MeetingPickerResult, NamedCalendar } from "../../../scenarios/types";
@@ -309,7 +310,7 @@ export function MeetingPickerView({ id, config, socketPath }: Props) {
   }, [cursorDay, cursorSlot, weekDays, totalSlots, slotGranularity, startHour]);
 
   // Keyboard controls
-  useInput((input, key) => {
+  useSafeInput((input, key) => {
     if (input === "q" || key.escape) {
       if (countdown !== null) {
         // Cancel countdown, deselect
@@ -394,7 +395,7 @@ export function MeetingPickerView({ id, config, socketPath }: Props) {
 
   // Render time column
   const renderTimeColumn = () => {
-    const slots: JSX.Element[] = [];
+    const slots: React.JSX.Element[] = [];
     for (let slotIndex = 0; slotIndex < totalSlots; slotIndex++) {
       const height = slotHeights[slotIndex];
       const slotMinutes = slotIndex * slotGranularity;
@@ -402,7 +403,7 @@ export function MeetingPickerView({ id, config, socketPath }: Props) {
       const minute = slotMinutes % 60;
       const showLabel = minute === 0;
 
-      const lines: JSX.Element[] = [];
+      const lines: React.JSX.Element[] = [];
       for (let line = 0; line < height; line++) {
         lines.push(
           <Text key={line} color="gray">
@@ -424,7 +425,7 @@ export function MeetingPickerView({ id, config, socketPath }: Props) {
   // Render day column
   const renderDayColumn = (dayIndex: number) => {
     const day = weekDays[dayIndex];
-    const slots: JSX.Element[] = [];
+    const slots: React.JSX.Element[] = [];
 
     for (let slotIndex = 0; slotIndex < totalSlots; slotIndex++) {
       const height = slotHeights[slotIndex];
@@ -438,7 +439,7 @@ export function MeetingPickerView({ id, config, socketPath }: Props) {
       const isCursor = cursorDay === dayIndex && cursorSlot === slotIndex;
       const isFree = !isBusy;
 
-      const lines: JSX.Element[] = [];
+      const lines: React.JSX.Element[] = [];
       for (let line = 0; line < height; line++) {
         let content = " ".repeat(columnWidth - 1);
         let bgColor: string | undefined;

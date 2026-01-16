@@ -1,7 +1,8 @@
 // Document Canvas - Markdown editor with syntax highlighting
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Box, Text, useInput, useApp, useStdout } from "ink";
+import { Box, Text, useApp, useStdout } from "ink";
+import { useSafeInput } from "../utils/use-safe-input";
 import { useIPCServer } from "./calendar/hooks/use-ipc-server";
 import { useMouse } from "./calendar/hooks/use-mouse";
 import { RawMarkdownRenderer } from "./document/components/raw-markdown-renderer";
@@ -234,7 +235,7 @@ export function Document({ id, config: initialConfig, socketPath, scenario = "di
   }, [getCursorLine, viewportHeight]);
 
   // Keyboard controls
-  useInput((input, key) => {
+  useSafeInput((input, key) => {
     // Ignore mouse escape sequence fragments that leak through
     // These look like: <, [, digits, ;, M, m, etc. from \x1b[<btn;x;y[Mm]
     if (input && /^[<\[\];Mm\d]+$/.test(input)) {

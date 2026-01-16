@@ -3,6 +3,7 @@
 import type { ScenarioDefinition } from "./types";
 import { displayScenario } from "./calendar/display";
 import { meetingPickerScenario } from "./calendar/meeting-picker";
+import { editScenario } from "./calendar/edit";
 import { documentDisplayScenario } from "./document/display";
 import { documentEditScenario } from "./document/edit";
 import { emailPreviewScenario } from "./document/email-preview";
@@ -13,6 +14,7 @@ const registry = new Map<string, ScenarioDefinition>();
 // Register calendar scenarios
 registry.set("calendar:display", displayScenario);
 registry.set("calendar:meeting-picker", meetingPickerScenario);
+registry.set("calendar:edit", editScenario);
 
 // Register document scenarios
 registry.set("document:display", documentDisplayScenario);

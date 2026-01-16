@@ -1,0 +1,4 @@
+{
+  "title": "Project README",
+  "content": "# Claude Canvas\n\nA TUI toolkit for Claude Code that provides interactive terminal displays.\n\n## Features\n\n- **Calendar View**: Display and select meeting times\n- **Document Editor**: View and edit markdown documents\n- **Flight Booking**: Compare flights and select seats\n\n## Installation\n\n```bash\nbun install\n```\n\n## Usage\n\n```bash\nbun run src/cli.ts spawn calendar\nbun run src/cli.ts spawn document\n```\n\n## Windows Support\n\nNow works on Windows with Windows Terminal!\n\n- Split panes with `wt.exe sp`\n- New tabs with `wt.exe new-tab`\n- TCP sockets for IPC\n\n## License\n\nMIT"
+}

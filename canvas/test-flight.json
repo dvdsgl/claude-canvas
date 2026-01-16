@@ -1,0 +1,130 @@
+{
+  "title": "Flight Search Results - JFK to LAX",
+  "flights": [
+    {
+      "id": "AA100",
+      "airline": "American Airlines",
+      "flightNumber": "AA 100",
+      "origin": {
+        "code": "JFK",
+        "name": "John F. Kennedy International",
+        "city": "New York",
+        "timezone": "EST"
+      },
+      "destination": {
+        "code": "LAX",
+        "name": "Los Angeles International",
+        "city": "Los Angeles",
+        "timezone": "PST"
+      },
+      "departureTime": "2026-01-20T06:00:00-05:00",
+      "arrivalTime": "2026-01-20T09:30:00-08:00",
+      "duration": 330,
+      "price": 29900,
+      "currency": "USD",
+      "cabinClass": "economy",
+      "aircraft": "Boeing 777-200",
+      "stops": 0
+    },
+    {
+      "id": "DL450",
+      "airline": "Delta",
+      "flightNumber": "DL 450",
+      "origin": {
+        "code": "JFK",
+        "name": "John F. Kennedy International",
+        "city": "New York",
+        "timezone": "EST"
+      },
+      "destination": {
+        "code": "LAX",
+        "name": "Los Angeles International",
+        "city": "Los Angeles",
+        "timezone": "PST"
+      },
+      "departureTime": "2026-01-20T08:15:00-05:00",
+      "arrivalTime": "2026-01-20T11:45:00-08:00",
+      "duration": 330,
+      "price": 34900,
+      "currency": "USD",
+      "cabinClass": "economy",
+      "aircraft": "Airbus A321",
+      "stops": 0
+    },
+    {
+      "id": "UA789",
+      "airline": "United",
+      "flightNumber": "UA 789",
+      "origin": {
+        "code": "JFK",
+        "name": "John F. Kennedy International",
+        "city": "New York",
+        "timezone": "EST"
+      },
+      "destination": {
+        "code": "LAX",
+        "name": "Los Angeles International",
+        "city": "Los Angeles",
+        "timezone": "PST"
+      },
+      "departureTime": "2026-01-20T10:30:00-05:00",
+      "arrivalTime": "2026-01-20T15:00:00-08:00",
+      "duration": 390,
+      "price": 24900,
+      "currency": "USD",
+      "cabinClass": "economy",
+      "aircraft": "Boeing 737-900",
+      "stops": 1
+    },
+    {
+      "id": "JB200",
+      "airline": "JetBlue",
+      "flightNumber": "B6 200",
+      "origin": {
+        "code": "JFK",
+        "name": "John F. Kennedy International",
+        "city": "New York",
+        "timezone": "EST"
+      },
+      "destination": {
+        "code": "LAX",
+        "name": "Los Angeles International",
+        "city": "Los Angeles",
+        "timezone": "PST"
+      },
+      "departureTime": "2026-01-20T14:00:00-05:00",
+      "arrivalTime": "2026-01-20T17:15:00-08:00",
+      "duration": 315,
+      "price": 27900,
+      "currency": "USD",
+      "cabinClass": "economy",
+      "aircraft": "Airbus A320",
+      "stops": 0
+    },
+    {
+      "id": "AA550",
+      "airline": "American Airlines",
+      "flightNumber": "AA 550",
+      "origin": {
+        "code": "JFK",
+        "name": "John F. Kennedy International",
+        "city": "New York",
+        "timezone": "EST"
+      },
+      "destination": {
+        "code": "LAX",
+        "name": "Los Angeles International",
+        "city": "Los Angeles",
+        "timezone": "PST"
+      },
+      "departureTime": "2026-01-20T19:00:00-05:00",
+      "arrivalTime": "2026-01-20T22:30:00-08:00",
+      "duration": 330,
+      "price": 59900,
+      "currency": "USD",
+      "cabinClass": "business",
+      "aircraft": "Boeing 777-200",
+      "stops": 0
+    }
+  ]
+}

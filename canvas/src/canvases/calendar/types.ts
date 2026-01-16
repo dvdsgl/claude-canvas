@@ -32,6 +32,24 @@ export const TEXT_COLORS: Record<string, string> = {
   red: "white",
 };
 
+// Event colors as a record for color picker
+export const EVENT_COLORS: Record<string, string> = {
+  yellow: "yellow",
+  green: "green",
+  blue: "blue",
+  magenta: "magenta",
+  red: "red",
+  cyan: "cyan",
+};
+
+// Calendar configuration for edit mode
+export interface EditCalendarConfig {
+  events?: CalendarEvent[];
+  storageFile?: string;
+  startHour?: number;
+  endHour?: number;
+}
+
 // Utility functions
 
 export function getWeekDays(baseDate: Date): Date[] {

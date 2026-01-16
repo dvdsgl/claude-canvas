@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Box, Text, useInput, useApp, useStdout } from "ink";
+import { Box, Text, useApp, useStdout } from "ink";
+import { useSafeInput } from "../utils/use-safe-input";
 import { MeetingPickerView } from "./calendar/scenarios/meeting-picker-view";
+import { EditView } from "./calendar/scenarios/edit-view";
 import type { MeetingPickerConfig } from "../scenarios/types";
+import type { EditCalendarConfig } from "./calendar/types";
 
 export interface CalendarEvent {
   id: string;
@@ -181,7 +184,7 @@ function DayColumn({ date, events, isToday, columnWidth, slotHeights, currentTim
   const showNowLine = currentHour >= START_HOUR && currentHour < END_HOUR;
 
   // Build half-hour slots (2 rows per hour)
-  const slots: JSX.Element[] = [];
+  const slots: React.JSX.Element[] = [];
   let slotIndex = 0;
   let cumulativeHeight = 0;
 
@@ -211,7 +214,7 @@ function DayColumn({ date, events, isToday, columnWidth, slotHeights, currentTim
         : -1;
 
       // Build content for multiple lines if thisSlotHeight > 1
-      const lines: JSX.Element[] = [];
+      const lines: React.JSX.Element[] = [];
       for (let line = 0; line < thisSlotHeight; line++) {
         const isNowLine = line === nowLinePosition;
 
@@ -360,6 +363,21 @@ export function Calendar({ id, config, socketPath, scenario = "display" }: Props
     return <MeetingPickerView id={id} config={pickerConfig} socketPath={socketPath} />;
   }
 
+  // Route to edit view if that scenario is requested
+  if (scenario === "edit") {
+    const editConfig: EditCalendarConfig = {
+      events: config?.events?.map((e) => ({
+        ...e,
+        startTime: new Date(e.startTime),
+        endTime: new Date(e.endTime),
+      })),
+      storageFile: (config as EditCalendarConfig)?.storageFile,
+      startHour: 6,
+      endHour: 22,
+    };
+    return <EditView id={id} config={editConfig} socketPath={socketPath} />;
+  }
+
   // Default display scenario
   const { exit } = useApp();
   const { stdout } = useStdout();
@@ -424,7 +442,7 @@ export function Calendar({ id, config, socketPath, scenario = "display" }: Props
   const weekDays = getWeekDays(currentDate);
   const today = new Date();
 
-  useInput((input, key) => {
+  useSafeInput((input, key) => {
     if (input === "q" || key.escape) {
       exit();
     } else if (input === "n" || key.rightArrow) {
@@ -450,7 +468,7 @@ export function Calendar({ id, config, socketPath, scenario = "display" }: Props
   const currentTimeDecimal = currentHour + currentMinute / 60;
   const showNowIndicator = currentHour >= START_HOUR && currentHour < END_HOUR;
 
-  const timeSlots: JSX.Element[] = [];
+  const timeSlots: React.JSX.Element[] = [];
   let timeSlotIndex = 0;
   for (let hour = START_HOUR; hour < END_HOUR; hour++) {
     // Hour label on first half
@@ -464,7 +482,7 @@ export function Calendar({ id, config, socketPath, scenario = "display" }: Props
       ? Math.floor(((currentTimeDecimal - slotTime) / 0.5) * firstHalfHeight)
       : -1;
 
-    const firstHalfLines: JSX.Element[] = [];
+    const firstHalfLines: React.JSX.Element[] = [];
     for (let line = 0; line < firstHalfHeight; line++) {
       const isNowLine = line === nowLineInFirstHalf;
       if (isNowLine) {
@@ -502,7 +520,7 @@ export function Calendar({ id, config, socketPath, scenario = "display" }: Props
       ? Math.floor(((currentTimeDecimal - secondSlotTime) / 0.5) * secondHalfHeight)
       : -1;
 
-    const secondHalfLines: JSX.Element[] = [];
+    const secondHalfLines: React.JSX.Element[] = [];
     for (let line = 0; line < secondHalfHeight; line++) {
       const isNowLine = line === nowLineInSecondHalf;
       if (isNowLine) {

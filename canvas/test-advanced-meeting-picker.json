@@ -1,0 +1,76 @@
+{
+  "title": "Find Meeting Time",
+  "meetingPickerMode": true,
+  "defaultView": "week",
+  "slotGranularity": 30,
+  "startHour": 8,
+  "endHour": 18,
+  "calendars": [
+    {
+      "name": "Alice",
+      "color": "blue",
+      "events": [
+        {
+          "id": "a1",
+          "title": "Team Standup",
+          "startTime": "2026-01-13T09:00:00",
+          "endTime": "2026-01-13T09:30:00"
+        },
+        {
+          "id": "a2",
+          "title": "Project Review",
+          "startTime": "2026-01-13T14:00:00",
+          "endTime": "2026-01-13T15:00:00"
+        },
+        {
+          "id": "a3",
+          "title": "Client Call",
+          "startTime": "2026-01-14T11:00:00",
+          "endTime": "2026-01-14T12:00:00"
+        }
+      ]
+    },
+    {
+      "name": "Bob",
+      "color": "green",
+      "events": [
+        {
+          "id": "b1",
+          "title": "Design Meeting",
+          "startTime": "2026-01-13T10:00:00",
+          "endTime": "2026-01-13T11:00:00"
+        },
+        {
+          "id": "b2",
+          "title": "1:1 with Manager",
+          "startTime": "2026-01-13T15:00:00",
+          "endTime": "2026-01-13T16:00:00"
+        },
+        {
+          "id": "b3",
+          "title": "Sprint Planning",
+          "startTime": "2026-01-15T09:00:00",
+          "endTime": "2026-01-15T10:30:00"
+        }
+      ]
+    },
+    {
+      "name": "Carol",
+      "color": "magenta",
+      "events": [
+        {
+          "id": "c1",
+          "title": "Training Session",
+          "startTime": "2026-01-13T13:00:00",
+          "endTime": "2026-01-13T14:30:00"
+        },
+        {
+          "id": "c2",
+          "title": "All Hands",
+          "startTime": "2026-01-14T15:00:00",
+          "endTime": "2026-01-14T16:00:00"
+        }
+      ]
+    }
+  ]
+}

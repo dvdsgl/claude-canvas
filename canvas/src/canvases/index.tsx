@@ -5,6 +5,7 @@ import { Document } from "./document";
 import type { DocumentConfig } from "./document/types";
 import { FlightCanvas } from "./flight";
 import type { FlightConfig } from "./flight/types";
+import { AdvancedCalendar, type AdvancedCalendarConfig } from "./advanced-calendar";
 
 // Clear screen and hide cursor
 function clearScreen() {
@@ -54,6 +55,12 @@ export async function renderCanvas(
       return renderFlight(
         id,
         config as FlightConfig | undefined,
+        options
+      );
+    case "advanced-calendar":
+      return renderAdvancedCalendar(
+        id,
+        config as AdvancedCalendarConfig | undefined,
         options
       );
     default:
@@ -111,6 +118,24 @@ async function renderFlight(
       config={config}
       socketPath={options?.socketPath}
       scenario={options?.scenario || "booking"}
+    />,
+    {
+      exitOnCtrlC: true,
+    }
+  );
+  await waitUntilExit();
+}
+
+async function renderAdvancedCalendar(
+  id: string,
+  config?: AdvancedCalendarConfig,
+  options?: RenderOptions
+): Promise<void> {
+  const { waitUntilExit } = render(
+    <AdvancedCalendar
+      id={id}
+      config={config}
+      socketPath={options?.socketPath}
     />,
     {
       exitOnCtrlC: true,

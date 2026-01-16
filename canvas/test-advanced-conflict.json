@@ -1,0 +1,51 @@
+{
+  "title": "Calendar with Conflicts",
+  "editable": true,
+  "defaultView": "week",
+  "startHour": 8,
+  "endHour": 18,
+  "events": [
+    {
+      "id": "evt1",
+      "title": "Team Standup",
+      "startTime": "2026-01-13T09:00:00",
+      "endTime": "2026-01-13T09:30:00",
+      "color": "blue"
+    },
+    {
+      "id": "evt2",
+      "title": "Conflicting Meeting",
+      "startTime": "2026-01-13T09:00:00",
+      "endTime": "2026-01-13T10:00:00",
+      "color": "green"
+    },
+    {
+      "id": "evt3",
+      "title": "Project Review",
+      "startTime": "2026-01-13T14:00:00",
+      "endTime": "2026-01-13T15:30:00",
+      "color": "magenta"
+    },
+    {
+      "id": "evt4",
+      "title": "Design Workshop",
+      "startTime": "2026-01-14T10:00:00",
+      "endTime": "2026-01-14T12:00:00",
+      "color": "yellow"
+    },
+    {
+      "id": "evt5",
+      "title": "Another Conflict",
+      "startTime": "2026-01-14T10:30:00",
+      "endTime": "2026-01-14T11:30:00",
+      "color": "cyan"
+    },
+    {
+      "id": "evt6",
+      "title": "Triple Conflict",
+      "startTime": "2026-01-14T11:00:00",
+      "endTime": "2026-01-14T11:30:00",
+      "color": "red"
+    }
+  ]
+}

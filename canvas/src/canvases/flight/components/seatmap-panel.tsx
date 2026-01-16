@@ -39,7 +39,7 @@ export function SeatmapPanel({
 
   // Render row number header (airplane rows across top) with nose indicator
   const renderHeader = () => {
-    const parts: JSX.Element[] = [];
+    const parts: React.JSX.Element[] = [];
     // Nose indicator and spacer
     parts.push(
       <Text key="nose" color={CYBER_COLORS.neonMagenta}>
@@ -62,7 +62,7 @@ export function SeatmapPanel({
   const renderSeatLetterRow = (letterIndex: number) => {
     const letter = seatmap.seatsPerRow[letterIndex];
     const isWindowSeat = letterIndex === 0 || letterIndex === seatmap.seatsPerRow.length - 1;
-    const parts: JSX.Element[] = [];
+    const parts: React.JSX.Element[] = [];
 
     // Seat letter label with window indicator
     parts.push(
@@ -84,7 +84,7 @@ export function SeatmapPanel({
 
       // Determine display
       let char = "-";
-      let color = CYBER_COLORS.neonCyan;
+      let color: string = CYBER_COLORS.neonCyan;
       let bgColor: string | undefined;
 
       if (isSelected) {
@@ -116,7 +116,7 @@ export function SeatmapPanel({
   };
 
   // Build all seat letter rows, inserting aisle where needed
-  const seatRows: JSX.Element[] = [];
+  const seatRows: React.JSX.Element[] = [];
   for (let i = 0; i < seatmap.seatsPerRow.length; i++) {
     const letter = seatmap.seatsPerRow[i];
     seatRows.push(renderSeatLetterRow(i));

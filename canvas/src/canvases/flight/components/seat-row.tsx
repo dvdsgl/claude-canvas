@@ -13,7 +13,7 @@ interface Props {
 }
 
 export function SeatRow({ row, seatmap, selectedSeat, cursorCol, focused }: Props) {
-  const parts: JSX.Element[] = [];
+  const parts: React.JSX.Element[] = [];
 
   // Row number
   parts.push(
@@ -36,7 +36,7 @@ export function SeatRow({ row, seatmap, selectedSeat, cursorCol, focused }: Prop
 
     // Determine display
     let char = "-";
-    let color = CYBER_COLORS.neonCyan;
+    let color: string = CYBER_COLORS.neonCyan;
     let bgColor: string | undefined;
 
     if (isSelected) {

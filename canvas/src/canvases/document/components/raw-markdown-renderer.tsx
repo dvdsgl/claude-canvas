@@ -184,10 +184,10 @@ export function RawMarkdownRenderer({
   }
 
   // Normalize selection bounds
-  const selStart = selectionStart !== null && selectionEnd !== null
+  const selStart = selectionStart != null && selectionEnd != null
     ? Math.min(selectionStart, selectionEnd)
     : null;
-  const selEnd = selectionStart !== null && selectionEnd !== null
+  const selEnd = selectionStart != null && selectionEnd != null
     ? Math.max(selectionStart, selectionEnd)
     : null;
   const hasSelection = selStart !== null && selEnd !== null && selStart !== selEnd;

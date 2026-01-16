@@ -1,0 +1,40 @@
+{
+  "title": "My Week",
+  "events": [
+    {
+      "id": "1",
+      "title": "Team Standup",
+      "startTime": "2026-01-12T09:00:00",
+      "endTime": "2026-01-12T09:30:00",
+      "color": "blue"
+    },
+    {
+      "id": "2",
+      "title": "Project Review",
+      "startTime": "2026-01-12T14:00:00",
+      "endTime": "2026-01-12T15:00:00",
+      "color": "green"
+    },
+    {
+      "id": "3",
+      "title": "Lunch with Alex",
+      "startTime": "2026-01-13T12:00:00",
+      "endTime": "2026-01-13T13:00:00",
+      "color": "yellow"
+    },
+    {
+      "id": "4",
+      "title": "Code Review",
+      "startTime": "2026-01-14T10:00:00",
+      "endTime": "2026-01-14T11:30:00",
+      "color": "cyan"
+    },
+    {
+      "id": "5",
+      "title": "Sprint Planning",
+      "startTime": "2026-01-15T09:00:00",
+      "endTime": "2026-01-15T10:00:00",
+      "color": "magenta"
+    }
+  ]
+}

@@ -9,7 +9,9 @@
   "scripts": {
     "start": "bun run src/cli.ts",
     "show": "bun run src/cli.ts show",
-    "spawn": "bun run src/cli.ts spawn"
+    "spawn": "bun run src/cli.ts spawn",
+    "test": "bun test",
+    "test:watch": "bun test --watch"
   },
   "dependencies": {
     "commander": "^14.0.2",

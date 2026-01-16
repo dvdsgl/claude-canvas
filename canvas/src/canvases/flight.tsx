@@ -1,7 +1,8 @@
 // Flight Booking Canvas - Cyberpunk-themed flight comparison and seat selection
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Box, Text, useInput, useApp, useStdout } from "ink";
+import { Box, Text, useApp, useStdout } from "ink";
+import { useSafeInput } from "../utils/use-safe-input";
 import { useIPC } from "./calendar/hooks/use-ipc";
 import {
   type FlightConfig,
@@ -158,7 +159,7 @@ export function FlightCanvas({
   );
 
   // Keyboard controls
-  useInput((input, key) => {
+  useSafeInput((input, key) => {
     // Cancel/quit
     if (input === "q" || key.escape) {
       if (countdown !== null) {

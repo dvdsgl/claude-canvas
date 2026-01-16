@@ -2,3 +2,7 @@ node_modules/
 tmp/
 *.log
 .DS_Store
+tmpclaude-*
+
+# Test data files
+test-flight-seatmap.json
